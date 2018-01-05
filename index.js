@@ -18,13 +18,17 @@ const element = React.createElement(
 )
 const wrapper = mount(element)
 
-// this next line throws an error
-// Error: Method “simulate” is only meant to be run on a single node. 2 found instead.
-wrapper.find('[data-test="button"]').simulate('click')
-// I want to use an API to find only return DOM component wrappers
-// and no composite component instance wrappers
-// is there another API I can use?
-// I know I can make my selector more specific (`button[data-test="button"]`)
-// but I don't want to have to do that either.
-// I also know that if I use `render` than I wont get composite component wrappers
-// but I need to simulate a click and I can't do that with `render`.
+wrapper
+  .find('[data-test="button"]')
+  // right now we have a wrapper with two things:
+  //   1. MyButton composite component instance
+  //   2. button DOM component
+  // If we tried to run `.simulate` on that, we'd get the following error:
+  // Error: Method “simulate” is only meant to be run on a single node. 2 found instead.
+  //
+  // So we have to simulate the click on only one of them. We could just do .first()
+  // but I prefer to simulate events (and in general only work with) DOM components
+  // in my tests, so instead we can use .hostNodes() to filter out only the DOM components
+  .hostNodes()
+  // now the wrapper only has the button DOM component and we can simulate the click
+  .simulate('click')
