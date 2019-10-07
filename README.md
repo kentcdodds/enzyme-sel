@@ -8,3 +8,7 @@ returning both.
 
 Found a solution and updated the code. Have to use `.hostNodes()` to filter out
 all non-DOM component wrappers.
+
+## BIGGER EDIT
+
+Check out [React Testing Library](https://testing-library.com/react) instead.
